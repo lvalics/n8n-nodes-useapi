@@ -3,9 +3,11 @@ node_modules
 .tmp
 tmp
 dist
+temp_auto_push.bat
 npm-debug.log*
 yarn.lock
-.vscode/launch.json
 .aider*
 docs/*
 
+.gitignore
+branch_structure.json

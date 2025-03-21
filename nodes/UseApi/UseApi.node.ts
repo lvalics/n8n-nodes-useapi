@@ -942,6 +942,150 @@ export class UseApi implements INodeType {
 								}
 							}
 						}
+					} else if (operation === 'listImages') {
+						try {
+							// Get parameters
+							const limit = this.getNodeParameter('limit', i, 10) as number;
+							
+							// Log for debugging
+							console.log(`DEBUG: Listing images, limit: ${limit}`);
+							
+							// Construct URL
+							const url = `${BASE_URL_V1}/minimax/images/?limit=${limit}`;
+							console.log(`DEBUG: Using URL: ${url}`);
+							
+							// Get credentials
+							const credentials = await this.getCredentials('useApiMinimax');
+							const token = credentials.apiKey as string;
+							console.log(`DEBUG: Token available: ${token ? 'Yes (not shown for security)' : 'No'}`);
+
+							// Make API request with detailed error handling
+							try {
+								responseData = await this.helpers.request({
+									method: 'GET',
+									url: url,
+									headers: {
+										'Authorization': `Bearer ${token}`,
+									},
+									json: true,
+								});
+								console.log(`DEBUG: Response received:`, responseData);
+								
+								// Filter results if specified
+								if (responseData && Array.isArray(responseData)) {
+									const filterType = this.getNodeParameter('filterType', i, 'none') as string;
+									if (filterType !== 'none') {
+										const filterValue = this.getNodeParameter('filterValue', i, '') as string;
+										if (filterValue) {
+											responseData = responseData.filter(image => {
+												if (filterType === 'id') {
+													return String(image.id) === filterValue ||
+														String(image.imageId) === filterValue;
+												}
+												
+												return String(image[filterType]) === filterValue ||
+													String(image[filterType])?.toLowerCase().includes(filterValue.toLowerCase());
+											});
+										}
+									}
+								}
+							} catch (requestError) {
+								console.error(`DEBUG: API request error:`, requestError.message);
+								if (requestError.response) {
+									console.error(`DEBUG: Status code:`, requestError.response.statusCode);
+									console.error(`DEBUG: Response body:`, requestError.response.body);
+								}
+								throw requestError;
+							}
+						} catch (error) {
+							console.error(`DEBUG: Operation error:`, error.message);
+							if (this.continueOnFail()) {
+								const executionData = this.helpers.constructExecutionMetaData(
+									this.helpers.returnJsonArray({
+										error: error.message,
+										details: error.response?.body || "No additional details",
+										status: error.response?.statusCode,
+										statusText: error.response?.statusText
+									}),
+									{ itemData: { item: i } },
+								);
+								returnData.push(...executionData);
+								continue;
+							}
+							throw error;
+						}
+					} else if (operation === 'listVideos') {
+						try {
+							// Get parameters
+							const limit = this.getNodeParameter('limit', i, 10) as number;
+							
+							// Log for debugging
+							console.log(`DEBUG: Listing videos, limit: ${limit}`);
+							
+							// Construct URL
+							const url = `${BASE_URL_V1}/minimax/videos/?limit=${limit}`;
+							console.log(`DEBUG: Using URL: ${url}`);
+							
+							// Get credentials
+							const credentials = await this.getCredentials('useApiMinimax');
+							const token = credentials.apiKey as string;
+							console.log(`DEBUG: Token available: ${token ? 'Yes (not shown for security)' : 'No'}`);
+
+							// Make API request with detailed error handling
+							try {
+								responseData = await this.helpers.request({
+									method: 'GET',
+									url: url,
+									headers: {
+										'Authorization': `Bearer ${token}`,
+									},
+									json: true,
+								});
+								console.log(`DEBUG: Response received:`, responseData);
+								
+								// Filter results if specified
+								if (responseData && Array.isArray(responseData)) {
+									const filterType = this.getNodeParameter('filterType', i, 'none') as string;
+									if (filterType !== 'none') {
+										const filterValue = this.getNodeParameter('filterValue', i, '') as string;
+										if (filterValue) {
+											responseData = responseData.filter(video => {
+												if (filterType === 'id') {
+													return String(video.id) === filterValue ||
+														String(video.videoId) === filterValue;
+												}
+												
+												return String(video[filterType]) === filterValue ||
+													String(video[filterType])?.toLowerCase().includes(filterValue.toLowerCase());
+											});
+										}
+									}
+								}
+							} catch (requestError) {
+								console.error(`DEBUG: API request error:`, requestError.message);
+								if (requestError.response) {
+									console.error(`DEBUG: Status code:`, requestError.response.statusCode);
+									console.error(`DEBUG: Response body:`, requestError.response.body);
+								}
+								throw requestError;
+							}
+						} catch (error) {
+							console.error(`DEBUG: Operation error:`, error.message);
+							if (this.continueOnFail()) {
+								const executionData = this.helpers.constructExecutionMetaData(
+									this.helpers.returnJsonArray({
+										error: error.message,
+										details: error.response?.body || "No additional details",
+										status: error.response?.statusCode,
+										statusText: error.response?.statusText
+									}),
+									{ itemData: { item: i } },
+								);
+								returnData.push(...executionData);
+								continue;
+							}
+							throw error;
+						}
 					} else if (operation === IMAGES_CREATE_OPERATION) {
 						try {
 							// Get required parameters

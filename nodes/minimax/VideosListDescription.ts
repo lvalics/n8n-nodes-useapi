@@ -1,8 +1,8 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const IMAGES_LIST_OPERATION = 'listImages';
+export const VIDEOS_LIST_OPERATION = 'listVideos';
 
-export const imagesListFields: INodeProperties[] = [
+export const videosListFields: INodeProperties[] = [
   {
     displayName: 'Limit',
     name: 'limit',
@@ -15,10 +15,10 @@ export const imagesListFields: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['minimax'],
-        operation: [IMAGES_LIST_OPERATION],
+        operation: [VIDEOS_LIST_OPERATION],
       },
     },
-    description: 'Maximum number of images to return',
+    description: 'Maximum number of videos to return',
   },
   {
     displayName: 'Filter Type',
@@ -34,7 +34,7 @@ export const imagesListFields: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['minimax'],
-        operation: [IMAGES_LIST_OPERATION],
+        operation: [VIDEOS_LIST_OPERATION],
       },
     },
     description: 'Field to filter the results by',
@@ -47,7 +47,7 @@ export const imagesListFields: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['minimax'],
-        operation: [IMAGES_LIST_OPERATION],
+        operation: [VIDEOS_LIST_OPERATION],
         filterType: ['id', 'status', 'created_at'],
       },
     },
